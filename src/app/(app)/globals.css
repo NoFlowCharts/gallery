@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "Bricolage";
+  src: url("../../../public/fonts/Bricolage") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+}
+
+@variant dark (&:where(.dark, .dark *));
+
+:root {
+  --black: #14151A;
+  --white: #FAFAFC;
+  --grey: #F0F0F2;
+
+  --txt-white-prim: #F0F0F2;
+  --txt-white-sec: #A4A4A6;
+  --txt-black-prim: #14151A;
+  --txt-black-sec: #86878C;
+
+  --bg: #FAFAFC;
+}
+
+@theme inline {
+  --color-black: var(--black);
+  --color-white: var(--white);
+  --color-grey: var(--grey);
+
+  --color-txt-white-prim: var(--txt-white-prim);
+  --color-txt-white-sec: var(--txt-white-sec);
+  --color-txt-black-prim: var(--txt-black-prim);
+  --color-txt-black-sec: var(--txt-black-sec);
+}
+
+.dark {
+  --bg: #1E1E1F;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-family: "Bricolage", system-ui, Helvetica, Arial, sans-serif;
+}
+
+body {
+  background: var(--bg);
+  transition: background 0.3s, color 0.3s;
+}
+
+h1, h2 {
+  font-family: "Bricolage", system-ui, Helvetica, Arial, sans-serif;
+  font-weight: 700;
+}
+
+bricolage {
+  font-family: "Bricolage", system-ui, Helvetica, Arial, sans-serif;
+}
