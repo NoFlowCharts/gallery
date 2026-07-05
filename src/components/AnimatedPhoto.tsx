@@ -4,7 +4,7 @@ import Image from 'next/image'
 
 type AnimatedPhotoProps = {
   src: string
-  alt?: string | null
+  alt?: string | null | undefined
   layoutId?: string
   className?: string
   priority?: boolean

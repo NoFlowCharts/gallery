@@ -13,7 +13,7 @@ export default async function InterceptedPhotoPage({ params }: Props) {
 
   return (
     <PhotoModal>
-      <AnimatedPhoto src={photo.url} alt={photo.alt} layoutId={`photo-${photo.id}`} />
+      <AnimatedPhoto src={photo.url} alt={""} layoutId={`photo-${photo.id}`} />
     </PhotoModal>
   )
 }

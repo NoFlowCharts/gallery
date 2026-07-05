@@ -12,7 +12,7 @@ export default async function PhotoPage({ params }: Props) {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-black">
-      <AnimatedPhoto src={photo.url} alt={photo.alt} layoutId={`photo-${photo.id}`} />
+      <AnimatedPhoto src={photo.url} layoutId={`photo-${photo.id}`} alt={""} />
     </div>
   )
 }
