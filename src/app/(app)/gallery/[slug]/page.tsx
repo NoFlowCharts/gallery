@@ -23,13 +23,24 @@ export async function generateMetadata({ params }: Props) {
   const { slug } = await params
   try {
     const album = await getAlbumBySlug(slug)
+    if (!album) return { title: 'Album not found — NoFlowCharts Gallery' }
+
+    const photoCount = ((album.photos ?? []) as Media[]).length
+    const photographer = (album as any).photographer
+    const descriptionParts = [
+      `${photoCount} ${photoCount === 1 ? 'photo' : 'photos'}`,
+      photographer ? `by ${photographer}` : null,
+      'captured by NoFlowCharts.',
+    ].filter(Boolean)
+
     return {
-      title: album ? `${album.title} — Gallery` : 'Album not found',
+      title: `${album.title} — NoFlowCharts Gallery`,
+      description: descriptionParts.join(' '),
     }
   } catch (error) {
     console.warn('Could not fetch album metadata (Postgres might be offline during build):', error)
     return {
-      title: 'Gallery',
+      title: 'NoFlowCharts Gallery',
     }
   }
 }
