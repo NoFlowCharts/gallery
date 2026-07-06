@@ -33,7 +33,9 @@ export async function getAllAlbumSlugs(): Promise<string[]> {
     select: { slug: true },
     limit: 1000,
   })
-  return result.docs.map((a) => a.slug)
+  return result.docs
+      .map((a) => a.slug)
+      .filter((slug): slug is string => Boolean(slug))
 }
 
 // ─── Photos ──────────────────────────────────────────────────────────────────
