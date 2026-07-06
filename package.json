@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "ci": "cross-env NODE_OPTIONS=--no-experimental-require-module payload migrate && next build"
+    "ci": "NODE_OPTIONS=--no-experimental-require-module payload migrate && next build"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.10",
@@ -36,7 +36,6 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "cross-env": "^10.1.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   },
