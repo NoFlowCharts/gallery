@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "ci": "NODE_OPTIONS=--no-experimental-require-module payload migrate && next build"
+    "ci": "payload migrate && next build"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.10",
