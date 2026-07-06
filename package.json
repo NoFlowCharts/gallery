@@ -38,6 +38,11 @@
     "typescript": "^5"
   },
   "pnpm": {
+    "supportedArchitectures": {
+      "os": ["linux"],
+      "cpu": ["x64"],
+      "libc": ["glibc"]
+    },
     "onlyBuiltDependencies": ["sharp"]
   }
 }
