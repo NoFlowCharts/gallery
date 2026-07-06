@@ -13,7 +13,6 @@
     "@payloadcms/db-postgres": "^3.85.2",
     "@payloadcms/next": "^3.85.2",
     "@payloadcms/richtext-lexical": "^3.85.2",
-    "@payloadcms/storage-vercel-blob": "^3.85.2",
     "@payloadcms/ui": "^3.85.2",
     "@remixicon/react": "^4.9.0",
     "@vercel/analytics": "^2.0.1",
@@ -26,7 +25,8 @@
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "sharp": "^0.35.3",
-    "slugify": "^1.6.9"
+    "slugify": "^1.6.9",
+    "@img/sharp-linux-x64": "^0.35.3"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
@@ -35,9 +35,6 @@
     "@types/react-dom": "^19",
     "tailwindcss": "^4",
     "typescript": "^5"
-  },
-  "optionalDependencies": {
-    "@img/sharp-linux-x64": "^0.35.3"
   },
   "pnpm": {
     "supportedArchitectures": {
