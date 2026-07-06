@@ -1,5 +1,6 @@
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 import path from 'path'
 import { buildConfig, type SharpDependency } from 'payload'
 import { fileURLToPath } from 'url'
@@ -32,4 +33,15 @@ export default buildConfig({
     push: true,
   }),
   sharp: sharp as unknown as SharpDependency,
+  plugins: [
+    vercelBlobStorage({
+      // Only active on Vercel when the token is set; local dev works without it
+      enabled: !!process.env.BLOB_READ_WRITE_TOKEN,
+      collections: {
+        media: true,
+      },
+      token: process.env.BLOB_READ_WRITE_TOKEN || '',
+    }),
+  ],
 })
+
