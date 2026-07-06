@@ -16,7 +16,7 @@ export default function AnimatedPhoto({
             layoutId={layoutId}
             src={src}
             alt={alt}
-            className="max-h-[90vh] max-w-[90vw] object-contain rounded-lg"
+            className="max-h-[90vh] max-w-full object-contain rounded-none"
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
         />
     )

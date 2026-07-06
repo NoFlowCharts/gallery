@@ -1,9 +1,10 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
-import { useCallback, useEffect, useState, useRef, MouseEventHandler } from 'react'
+import { useState, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import Link from 'next/link'
+import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import Button from '@/components/Button'
 import {
   RiDownloadLine,
@@ -13,23 +14,27 @@ import {
   RiCloseLine,
 } from '@remixicon/react'
 
-type PhotoModalProps = {
-  children: React.ReactNode
-  photoUrl: string
-  photoId: string | number
+type Photo = {
+  id: string | number
+  url?: string | null
+  alt?: string | null
+  width?: number | null
+  height?: number | null
+}
+
+type PhotoViewClientProps = {
+  photo: Photo
   prevPhotoId: string | number | null
   nextPhotoId: string | number | null
   slug: string
 }
 
-export default function PhotoModal({
-  children,
-  photoUrl,
-  photoId,
+export default function PhotoViewClient({
+  photo,
   prevPhotoId,
   nextPhotoId,
   slug,
-}: PhotoModalProps) {
+}: PhotoViewClientProps) {
   const router = useRouter()
   const [open, setOpen] = useState(false)
   const [copied, setCopied] = useState(false)
@@ -39,13 +44,9 @@ export default function PhotoModal({
     setMounted(true)
   }, [])
 
-  const onDismiss = useCallback(() => {
-    router.back()
-  }, [router])
-
   const shareUrl = typeof window !== 'undefined'
-    ? `${window.location.origin}/gallery/${slug}/photo/${photoId}`
-    : `/gallery/${slug}/photo/${photoId}`
+    ? `${window.location.origin}/gallery/${slug}/photo/${photo.id}`
+    : `/gallery/${slug}/photo/${photo.id}`
 
   const copy = async () => {
     await navigator.clipboard.writeText(shareUrl)
@@ -53,36 +54,36 @@ export default function PhotoModal({
     setTimeout(() => setCopied(false), 2000)
   }
 
-  const onKeyDown = useCallback(
-    (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        if (open) setOpen(false)
-        else onDismiss()
-      }
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'ArrowLeft' && prevPhotoId) {
         router.push(`/gallery/${slug}/photo/${prevPhotoId}`)
       }
       if (e.key === 'ArrowRight' && nextPhotoId) {
         router.push(`/gallery/${slug}/photo/${nextPhotoId}`)
       }
-    },
-    [onDismiss, open, prevPhotoId, nextPhotoId, router, slug]
-  )
-
-  useEffect(() => {
-    document.addEventListener('keydown', onKeyDown)
-    return () => document.removeEventListener('keydown', onKeyDown)
-  }, [onKeyDown])
+      if (e.key === 'Escape') {
+        if (open) {
+          setOpen(false)
+        } else {
+          router.push(`/gallery/${slug}`)
+        }
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [router, prevPhotoId, nextPhotoId, slug, open])
 
   const downloadPhoto = async () => {
-    if (!photoUrl) return
+    if (!photo.url) return
     try {
-      const res = await fetch(photoUrl)
+      const res = await fetch(photo.url)
       const blob = await res.blob()
       const a = document.createElement('a')
       a.href = URL.createObjectURL(blob)
-      const ext = photoUrl.split('.').pop()?.split('?')[0] ?? 'jpg'
-      a.download = `photo-${photoId}.${ext}`
+      const ext = photo.url.split('.').pop()?.split('?')[0] ?? 'jpg'
+      a.download = `photo-${photo.id}.${ext}`
       a.click()
       URL.revokeObjectURL(a.href)
     } catch (e) {
@@ -91,23 +92,19 @@ export default function PhotoModal({
   }
 
   return (
-    <div
-      onClick={onDismiss}
-      className="fixed inset-0 z-50 flex flex-col bg-[#1E1E1F]/95 backdrop-blur-md select-none justify-between"
-    >
-      {/* Top Header Row */}
-      <header 
-        className="w-full flex items-center justify-center py-4 px-5"
-        onClick={(e) => e.stopPropagation()}
-      >
+    <div className="min-h-screen bg-[#1E1E1F] text-[#FAFAFC] flex flex-col justify-between select-none">
+      {/* Header */}
+      <header className="w-full flex items-center justify-center py-4 px-5">
         <div className="flex justify-between items-center w-full xl:max-w-[1190px] lg:max-w-[986px]">
+          {/* Back button */}
           <Button 
             text="Back" 
-            onClick={onDismiss} 
+            href={`/gallery/${slug}`} 
             variant="secondary" 
             className="!border-[#FAFAFC] !text-[#FAFAFC] hover:!bg-[#FAFAFC] hover:!text-[#1E1E1F]"
           />
 
+          {/* Individual Photo Actions */}
           <div className="flex items-center gap-4">
             <button
               onClick={downloadPhoto}
@@ -127,16 +124,10 @@ export default function PhotoModal({
         </div>
       </header>
 
-      {/* Main Container with Arrows and Photo */}
-      <div 
-        className="flex-1 w-full flex items-center justify-center py-8"
-        onClick={onDismiss}
-      >
-        <div 
-          className="flex items-center justify-between w-full xl:max-w-[1190px] lg:max-w-[986px] px-5 gap-6"
-          onClick={(e) => e.stopPropagation()}
-        >
-          {/* Previous photo button (Desktop only) */}
+      {/* Main photo container area */}
+      <main className="flex-1 w-full flex items-center justify-center py-8">
+        <div className="flex items-center justify-between w-full xl:max-w-[1190px] lg:max-w-[986px] px-5 gap-6">
+          {/* Previous photo button (Desktop) */}
           <div className="w-[68px] flex-shrink-0 hidden md:block">
             {prevPhotoId ? (
               <Link
@@ -155,7 +146,17 @@ export default function PhotoModal({
           {/* Photo content & Mobile Arrows */}
           <div className="flex-1 flex flex-col items-center justify-center max-h-[75vh] relative">
             <div className="w-full flex justify-center items-center max-h-[65vh] md:max-h-[75vh]">
-              {children}
+              {photo.url && (
+                <Image
+                  src={photo.url}
+                  alt={photo.alt ?? ''}
+                  width={photo.width ?? 1200}
+                  height={photo.height ?? 900}
+                  priority
+                  className="max-h-[65vh] md:max-h-[75vh] w-auto h-auto object-contain select-none shadow-2xl"
+                  style={{ maxWidth: '100%' }}
+                />
+              )}
             </div>
 
             {/* Mobile Arrows (below photo) */}
@@ -188,7 +189,7 @@ export default function PhotoModal({
             </div>
           </div>
 
-          {/* Next photo button (Desktop only) */}
+          {/* Next photo button (Desktop) */}
           <div className="w-[68px] flex-shrink-0 hidden md:block">
             {nextPhotoId ? (
               <Link
@@ -204,8 +205,9 @@ export default function PhotoModal({
             )}
           </div>
         </div>
-      </div>
+      </main>
 
+      {/* Footer spacer */}
       <footer className="h-16" />
 
       {/* Share Modal Portal */}

@@ -19,19 +19,19 @@ type ButtonProps = {
 };
 
 const Button: React.FC<ButtonProps> = ({
-                                           text,
-                                           onClick,
-                                           disabled = false,
-                                           active = false,
-                                           variant = 'primary',
-                                           className = "",
-                                           href,
-                                           target,
-                                           rel,
-                                           type = 'button',
-                                           gaEvent,
-                                           gaEventParams,
-                                       }) => {
+    text,
+    onClick,
+    disabled = false,
+    active = false,
+    variant = 'primary',
+    className = "",
+    href,
+    target,
+    rel,
+    type = 'button',
+    gaEvent,
+    gaEventParams,
+}) => {
     const baseClasses = [
         "text-[18px] font-light pt-2 pb-2.5 px-6 transition duration-300 ease-in-out inline-block text-center",
         variant === 'primary'
