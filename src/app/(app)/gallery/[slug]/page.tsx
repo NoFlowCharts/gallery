@@ -9,15 +9,27 @@ import type { Media } from '@/payload-types'
 type Props = { params: Promise<{ slug: string }> }
 
 export async function generateStaticParams() {
-  const slugs = await getAllAlbumSlugs()
-  return slugs.map((slug) => ({ slug }))
+  try {
+    const slugs = await getAllAlbumSlugs()
+    return slugs.map((slug) => ({ slug }))
+  } catch (error) {
+    console.warn('Could not fetch album slugs for static generation (Postgres might be offline during build):', error)
+    return []
+  }
 }
 
 export async function generateMetadata({ params }: Props) {
   const { slug } = await params
-  const album = await getAlbumBySlug(slug)
-  return {
-    title: album ? `${album.title} — Gallery` : 'Album not found',
+  try {
+    const album = await getAlbumBySlug(slug)
+    return {
+      title: album ? `${album.title} — Gallery` : 'Album not found',
+    }
+  } catch (error) {
+    console.warn('Could not fetch album metadata (Postgres might be offline during build):', error)
+    return {
+      title: 'Gallery',
+    }
   }
 }
 
