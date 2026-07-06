@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "ci": "node --import tsx scripts/migrate.mj next build --webpack"
+    "ci": "node --import tsx scripts/migrate.mjs next build --webpack"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.10",
