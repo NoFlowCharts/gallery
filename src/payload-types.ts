@@ -86,7 +86,7 @@ export interface Config {
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
   };
   db: {
-    defaultIDType: string;
+    defaultIDType: number;
   };
   fallbackLocale: null;
   globals: {};
@@ -124,7 +124,7 @@ export interface UserAuthOperations {
  * via the `definition` "users".
  */
 export interface User {
-  id: string;
+  id: number;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -149,7 +149,10 @@ export interface User {
  * via the `definition` "media".
  */
 export interface Media {
-  id: string;
+  id: number;
+  /**
+   * Alternative text for accessibility (optional)
+   */
   alt?: string | null;
   updatedAt: string;
   createdAt: string;
@@ -170,7 +173,7 @@ export interface Media {
       mimeType?: string | null;
       filesize?: number | null;
       filename?: string | null;
-    } | null;
+    };
     card?: {
       url?: string | null;
       width?: number | null;
@@ -178,7 +181,7 @@ export interface Media {
       mimeType?: string | null;
       filesize?: number | null;
       filename?: string | null;
-    } | null;
+    };
     full?: {
       url?: string | null;
       width?: number | null;
@@ -186,7 +189,7 @@ export interface Media {
       mimeType?: string | null;
       filesize?: number | null;
       filename?: string | null;
-    } | null;
+    };
   };
 }
 /**
@@ -194,11 +197,21 @@ export interface Media {
  * via the `definition` "albums".
  */
 export interface Album {
-  id: string;
+  id: number;
   title: string;
-  slug: string;
-  cover?: (string | null) | Media;
-  photos?: (string | Media)[] | null;
+  /**
+   * Auto-generated from title if left blank
+   */
+  slug?: string | null;
+  /**
+   * Name of the photographer
+   */
+  photographer?: string | null;
+  /**
+   * Auto-assigned from first photo if left blank
+   */
+  cover?: (number | null) | Media;
+  photos?: (number | Media)[] | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -207,7 +220,7 @@ export interface Album {
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
-  id: string;
+  id: number;
   key: string;
   data:
     | {
@@ -224,24 +237,24 @@ export interface PayloadKv {
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
-  id: string;
+  id: number;
   document?:
     | ({
         relationTo: 'users';
-        value: string | User;
+        value: number | User;
       } | null)
     | ({
         relationTo: 'media';
-        value: string | Media;
+        value: number | Media;
       } | null)
     | ({
         relationTo: 'albums';
-        value: string | Album;
+        value: number | Album;
       } | null);
   globalSlug?: string | null;
   user: {
     relationTo: 'users';
-    value: string | User;
+    value: number | User;
   };
   updatedAt: string;
   createdAt: string;
@@ -251,10 +264,10 @@ export interface PayloadLockedDocument {
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
-  id: string;
+  id: number;
   user: {
     relationTo: 'users';
-    value: string | User;
+    value: number | User;
   };
   key?: string | null;
   value?:
@@ -274,7 +287,7 @@ export interface PayloadPreference {
  * via the `definition` "payload-migrations".
  */
 export interface PayloadMigration {
-  id: string;
+  id: number;
   name?: string | null;
   batch?: number | null;
   updatedAt: string;
@@ -319,32 +332,40 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
-  sizes?: T | {
-    thumbnail?: T | {
-      url?: T;
-      width?: T;
-      height?: T;
-      mimeType?: T;
-      filesize?: T;
-      filename?: T;
-    };
-    card?: T | {
-      url?: T;
-      width?: T;
-      height?: T;
-      mimeType?: T;
-      filesize?: T;
-      filename?: T;
-    };
-    full?: T | {
-      url?: T;
-      width?: T;
-      height?: T;
-      mimeType?: T;
-      filesize?: T;
-      filename?: T;
-    };
-  };
+  sizes?:
+    | T
+    | {
+        thumbnail?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        card?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        full?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -353,6 +374,7 @@ export interface MediaSelect<T extends boolean = true> {
 export interface AlbumsSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
+  photographer?: T;
   cover?: T;
   photos?: T;
   updatedAt?: T;

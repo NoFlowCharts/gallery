@@ -1,12 +1,13 @@
 {
   "name": "gallery",
   "version": "0.1.0",
+  "type": "module",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "ci": "node --import tsx scripts/migrate.mjs && next build --webpack"
+    "ci": "next build --webpack"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.10",
@@ -53,5 +54,8 @@
     "onlyBuiltDependencies": [
       "sharp"
     ]
+  },
+  "engines": {
+    "node": "22.x"
   }
 }
