@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "ci": "next build"
+    "ci": "next build --no-turbopack"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.10",
