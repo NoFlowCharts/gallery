@@ -2,8 +2,8 @@ import Button from "@/components/Button";
 
 const Footer = () => {
     return (
-        <footer className="w-full">
-            <div className="flex justify-between items-center">
+        <footer className="w-full flex items-center justify-center">
+            <div className="flex justify-between items-center w-full xl:max-w-[1190px] lg:max-w-[986px]">
                 <div className="flex gap-3 items-end">
                     <img src="/logo/sign.svg" alt="Logo" className="h-[100px] dark:invert" />
                     <div className="flex flex-col gap-2">
@@ -23,7 +23,7 @@ const Footer = () => {
                     </div>
                 </div>
 
-                <Button text="Back to top" />
+                <Button href="#photos-grid" text="Back to top" />
             </div>
         </footer>
     )

@@ -26,6 +26,7 @@
   --color-black: var(--black);
   --color-white: var(--white);
   --color-grey: var(--grey);
+  --color-bg: var(--bg);
 
   --color-txt-white-prim: var(--txt-white-prim);
   --color-txt-white-sec: var(--txt-white-sec);
@@ -67,4 +68,9 @@ bricolage {
 
 .animate-fade-in {
   animation: fadeIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideshow-progress {
+  from { width: 0%; }
+  to   { width: 100%; }
 }

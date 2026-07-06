@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import Footer from '@/components/Footer'
+import Header from '@/components/Header'
 import Button from '@/components/Button'
 import { getAlbumBySlug, getAllAlbumSlugs } from '@/lib/payload'
 import type { Media } from '@/payload-types'
@@ -44,7 +45,7 @@ export default async function GalleryPage({ params }: Props) {
   const coverUrl = cover?.url
 
   return (
-    <div className="flex flex-col gap-[80px]">
+    <div className="flex flex-col">
       <div className={`relative w-full min-h-screen px-5 pb-10 flex justify-center items-end overflow-hidden ${coverUrl ? 'dark' : ''}`}>
         {coverUrl && (
           <>
@@ -79,7 +80,9 @@ export default async function GalleryPage({ params }: Props) {
         </div>
       </div>
 
-      <div id="photos-grid">
+      <Header photos={photos} slug={slug} albumTitle={album.title} />
+
+      <div id="photos-grid" className="md:pb-[80px] pb-[50px] pt-5">
         {photos.length === 0 ? (
         <div className="px-5 text-txt-black-sec dark:text-txt-white-sec">
           <p className="text-lg font-light">No photos in this album yet.</p>
@@ -87,7 +90,7 @@ export default async function GalleryPage({ params }: Props) {
       ) : (
         <div
           className="
-            w-full px-5 
+            w-full md:px-5 px-2.5
             columns-2
             sm:columns-3
             lg:columns-4
@@ -119,7 +122,7 @@ export default async function GalleryPage({ params }: Props) {
       )}
       </div>
 
-      <div className="px-5 pb-10">
+      <div className="lg:px-0 md:px-5 px-2.5 pb-10">
         <Footer />
       </div>
     </div>
