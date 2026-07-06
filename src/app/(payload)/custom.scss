@@ -1,0 +1,28 @@
+/* Custom Layout for Albums Collection */
+
+@media (min-width: 1024px) {
+  /* Force a standard Flexbox layout for the Payload Edit View */
+  body .document-fields--has-sidebar {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: flex-start !important;
+    gap: 2rem !important; /* Spacing between left and right */
+  }
+  
+  /* Force the Main column (Left side) to exactly 33.33% */
+  body .document-fields__main {
+    flex: 0 0 33.33% !important;
+    max-width: 33.33% !important;
+    min-width: 33.33% !important;
+    width: 33.33% !important;
+  }
+  
+  /* Force the Sidebar (Right side, Photos) to exactly 66.66% */
+  body .document-fields__sidebar-wrap {
+    flex: 0 0 calc(66.66% - 2rem) !important; /* Subtract gap */
+    max-width: calc(66.66% - 2rem) !important;
+    min-width: calc(66.66% - 2rem) !important;
+    width: calc(66.66% - 2rem) !important;
+  }
+}
