@@ -3,6 +3,12 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   serverExternalPackages: ['sharp'],
+  // Raise the body-size limit for photo uploads (default is 1 MB)
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '25mb',
+    },
+  },
   turbopack: {
     resolveAlias: {
       '@payload-config': './src/payload.config.ts',

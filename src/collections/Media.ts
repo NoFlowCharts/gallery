@@ -27,17 +27,29 @@ export const Media: CollectionConfig = {
         width: 300,
         height: 300,
         position: 'centre',
+        formatOptions: {
+          format: 'jpeg',
+          options: { quality: 70 },
+        },
       },
       {
         name: 'card',
         width: 800,
         height: 600,
         position: 'centre',
+        formatOptions: {
+          format: 'jpeg',
+          options: { quality: 75 },
+        },
       },
       {
         name: 'full',
         width: 1920,
         height: undefined,
+        formatOptions: {
+          format: 'jpeg',
+          options: { quality: 85 },
+        },
       },
     ],
     adminThumbnail: 'thumbnail',

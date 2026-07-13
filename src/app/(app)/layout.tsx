@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import {ThemeProvider} from "next-themes";
+import {Analytics} from "@vercel/analytics/vue";
 
 export const metadata: Metadata = {
   title: "NoFlowCharts Gallery",
@@ -29,16 +30,17 @@ export default function RootLayout({
       lang="en"
       suppressHydrationWarning={true}
     >
-      <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-      >
-        <body className="min-h-full">
+      <body className="min-h-full">
+        <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+        >
           {children}
-        </body>
-      </ThemeProvider>
+        </ThemeProvider>
+        <Analytics />
+      </body>
     </html>
   );
 }
