@@ -51,6 +51,35 @@ export const Albums: CollectionConfig = {
         return data
       },
     ],
+    afterDelete: [
+      async ({ doc, req }) => {
+        // Collect all media IDs referenced by this album (photos + cover)
+        const mediaIds: (string | number)[] = []
+
+        if (doc.cover) {
+          const coverId = typeof doc.cover === 'object' ? doc.cover.id : doc.cover
+          if (coverId) mediaIds.push(coverId)
+        }
+
+        if (Array.isArray(doc.photos)) {
+          for (const photo of doc.photos) {
+            const photoId = typeof photo === 'object' ? photo.id : photo
+            if (photoId && !mediaIds.includes(photoId)) {
+              mediaIds.push(photoId)
+            }
+          }
+        }
+
+        // Delete each media document — Payload will also remove the file from storage
+        for (const id of mediaIds) {
+          try {
+            await req.payload.delete({ collection: 'media', id })
+          } catch (err) {
+            req.payload.logger.error(`Failed to delete media ${id} for album ${doc.id}: ${err}`)
+          }
+        }
+      },
+    ],
   },
   fields: [
     {
