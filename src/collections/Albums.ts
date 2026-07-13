@@ -70,14 +70,16 @@ export const Albums: CollectionConfig = {
           }
         }
 
-        // Delete each media document — Payload will also remove the file from storage
-        for (const id of mediaIds) {
-          try {
-            await req.payload.delete({ collection: 'media', id })
-          } catch (err) {
-            req.payload.logger.error(`Failed to delete media ${id} for album ${doc.id}: ${err}`)
-          }
-        }
+        // Delete each media document in parallel — Payload will also remove the file from storage
+        await Promise.all(
+          mediaIds.map(async (id) => {
+            try {
+              await req.payload.delete({ collection: 'media', id })
+            } catch (err) {
+              req.payload.logger.error(`Failed to delete media ${id} for album ${doc.id}: ${err}`)
+            }
+          })
+        )
       },
     ],
   },
