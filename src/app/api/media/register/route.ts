@@ -75,9 +75,22 @@ export async function POST(request: NextRequest): Promise<Response> {
     )
   }
 
-  // ── 4. Create Payload media document (runs Sharp + storage-vercel-blob) ────
-  // Payload's local API accepts a `file` object here — it will generate image
-  // size variants via Sharp and upload them all through the storage plugin.
+  // ── 4. Delete the temp blob BEFORE creating the Payload record ────────────
+  // The client uploaded to "temp/{timestamp}-{filename}". Payload will upload
+  // the processed file to "media/{filename}". Deleting first avoids any
+  // residual "blob already exists" if paths overlap, and frees temp storage.
+  try {
+    await del(url)
+  } catch (err) {
+    // Non-fatal — log but continue. Orphaned temp blobs are harmless.
+    console.warn(`[media/register] Could not delete temp blob ${url}:`, err)
+  }
+
+  // ── 5. Create Payload media document (runs Sharp + storage-vercel-blob) ────
+  // Payload's local API accepts a `file` object — it generates image size
+  // variants via Sharp and uploads them through the storage plugin.
+  // The storage plugin uploads to "media/{filename}", not "temp/…", so there
+  // is no conflict with the now-deleted temp blob.
   let doc: Awaited<ReturnType<typeof payload.create>>
   try {
     doc = await payload.create({
@@ -95,14 +108,6 @@ export async function POST(request: NextRequest): Promise<Response> {
       { error: `Payload media creation failed: ${(err as Error).message}` },
       { status: 500 },
     )
-  }
-
-  // ── 5. Delete the original temp blob (Payload created its own permanent copy) ─
-  try {
-    await del(url)
-  } catch (err) {
-    // Non-fatal: log but don't fail the request
-    console.warn(`[media/register] Could not delete temp blob ${url}:`, err)
   }
 
   // ── 6. Return the new Payload media document ───────────────────────────────

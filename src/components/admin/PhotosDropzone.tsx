@@ -56,8 +56,10 @@ export default function PhotosDropzone({ path }: { path: string }) {
 
     try {
       // ── Step 1: Client-side direct upload to Vercel Blob ─────────────────
-      // No serverless body limit — file goes directly to Vercel Blob.
-      const blob = await upload(file.name, file, {
+      // Upload to a "temp/" prefix so the path is always distinct from
+      // Payload's "media/" prefix — avoids "blob already exists" on registration.
+      const tempPath = `temp/${Date.now()}-${file.name}`
+      const blob = await upload(tempPath, file, {
         access: 'public',
         handleUploadUrl: '/api/media/upload-url',
         onUploadProgress: ({ percentage }) => {
