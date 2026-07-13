@@ -37,8 +37,6 @@ export default buildConfig({
     vercelBlobStorage({
       // Only active on Vercel when the token is set; local dev works without it
       enabled: !!process.env.BLOB_READ_WRITE_TOKEN,
-      // Tells the plugin the file is already in Blob — skip server-side re-upload
-      clientUploads: true,
       collections: {
         media: true,
       },
