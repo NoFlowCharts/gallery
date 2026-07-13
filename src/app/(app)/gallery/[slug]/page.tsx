@@ -7,6 +7,8 @@ import Button from '@/components/Button'
 import { getAlbumBySlug, getAllAlbumSlugs } from '@/lib/payload'
 import type { Media } from '@/payload-types'
 
+export const dynamic = 'force-dynamic'
+
 type Props = { params: Promise<{ slug: string }> }
 
 export async function generateStaticParams() {

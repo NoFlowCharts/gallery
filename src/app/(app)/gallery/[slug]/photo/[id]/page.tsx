@@ -2,6 +2,8 @@ import { notFound } from 'next/navigation'
 import AnimatedPhoto from '@/components/ui/AnimatedPhoto'
 import { getPhotoById } from '@/lib/payload'
 
+export const dynamic = 'force-dynamic'
+
 type Props = { params: Promise<{ slug: string; id: string }> }
 
 export default async function PhotoPage({ params }: Props) {

@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import slugify from 'slugify'
+import { revalidatePath } from 'next/cache'
 
 export const Albums: CollectionConfig = {
   slug: 'albums',
@@ -50,6 +51,28 @@ export const Albums: CollectionConfig = {
 
         return data
       },
+    ],
+    afterChange: [
+      ({ doc }) => {
+        if (doc?.slug) {
+          try {
+            revalidatePath(`/gallery/${doc.slug}`)
+          } catch (err) {
+            console.error('Error revalidating album path:', err)
+          }
+        }
+      }
+    ],
+    afterDelete: [
+      ({ doc }) => {
+        if (doc?.slug) {
+          try {
+            revalidatePath(`/gallery/${doc.slug}`)
+          } catch (err) {
+            console.error('Error revalidating album path on delete:', err)
+          }
+        }
+      }
     ],
   },
   fields: [
