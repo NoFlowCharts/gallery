@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import {ThemeProvider} from "next-themes";
-import {Analytics} from "@vercel/analytics/vue";
+import {Analytics} from "@vercel/analytics/next";
+
 
 export const metadata: Metadata = {
   title: "NoFlowCharts Gallery",
